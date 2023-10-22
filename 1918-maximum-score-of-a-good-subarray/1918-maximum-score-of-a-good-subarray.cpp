@@ -25,7 +25,7 @@ public:
                 if(i==0 and j==n-1) break;
 
                 i--;
-                j--;
+                j++;
                 curmin = min(curmin, v[i]);
             }
         }
