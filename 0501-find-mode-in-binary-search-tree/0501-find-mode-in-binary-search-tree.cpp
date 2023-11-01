@@ -9,50 +9,25 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
 class Solution {
 public:
     vector<int> findMode(TreeNode* root) {
         vector<int> ans;
-        map<int,int> mp;
+        unordered_map<int,int> mp;
+        TreeNode *p;
 
-        stack<pair<TreeNode*,int>> st;
-        st.push(make_pair(root,1));
+        queue<TreeNode*> q;
+        q.push(root);
 
-        pair<TreeNode*,int> p;
-
-        while(st.size()!=0) // dfs
+        while(q.size()!=0)
         {
-            p = st.top();
+            p = q.front(); q.pop();
             
-            if(p.second == 1)   mp[p.first->val]++;
+            mp[p->val]++;
 
-            if(p.second == 1)
-            {
-                if(p.first->left != NULL)
-                {
-                    p.second++;
-                    st.pop(); st.push(p); //update top
-
-                    st.push(make_pair(p.first->left, 1));
-                    continue;
-                }
-                else p.second++;
-            }
-            
-            if(p.second == 2)
-            {
-                if(p.first->right != NULL)
-                {
-                    p.second++;
-                    st.pop(); st.push(p); //update top
-
-                    st.push(make_pair(p.first->right, 1));
-                    continue;
-                }
-                else p.second++;
-            }
-
-            st.pop();
+            if(p->left != NULL) q.push(p->left);
+            if(p->right != NULL)    q.push(p->right);
         }
 
         int mode = INT_MIN;
@@ -62,3 +37,61 @@ public:
         return ans;
     }
 };
+
+
+
+////////////////////////// DFS solution //////////////////////////////////////////
+
+// class Solution {
+// public:
+//     vector<int> findMode(TreeNode* root) {
+//         vector<int> ans;
+//         map<int,int> mp;
+
+//         stack<pair<TreeNode*,int>> st;
+//         st.push(make_pair(root,1));
+
+//         pair<TreeNode*,int> p;
+
+//         while(st.size()!=0) // dfs
+//         {
+//             p = st.top();
+            
+//             if(p.second == 1)   mp[p.first->val]++;
+
+//             if(p.second == 1)
+//             {
+//                 if(p.first->left != NULL)
+//                 {
+//                     p.second++;
+//                     st.pop(); st.push(p); //update top
+
+//                     st.push(make_pair(p.first->left, 1));
+//                     continue;
+//                 }
+//                 else p.second++;
+//             }
+            
+//             if(p.second == 2)
+//             {
+//                 if(p.first->right != NULL)
+//                 {
+//                     p.second++;
+//                     st.pop(); st.push(p); //update top
+
+//                     st.push(make_pair(p.first->right, 1));
+//                     continue;
+//                 }
+//                 else p.second++;
+//             }
+
+//             st.pop();
+//         }
+
+//         int mode = INT_MIN;
+//         for(pair<int,int> p: mp) { mode = max(mode, p.second); }
+//         for(pair<int,int> p: mp) { if(p.second == mode) ans.push_back(p.first); }
+
+//         return ans;
+//     }
+// };
